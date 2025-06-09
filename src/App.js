@@ -1,13 +1,22 @@
 import React from 'react';
-import {BrowserRouter, Routes, Route} from 'react-router-dom';
+import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Dashboard from './pages/Dashboard';
-import Contact from './pages/Contacts';
+import Contacts from './pages/Contacts';
 import Login from './pages/Login'
+import Sidebar from './components/Sidebar';
 
 function App(){
     return(
-        <h2>Hello</h2>
+        <Router>
+        <Navbar/>
+        <Routes>
+            <Route path='/' element={<Dashboard/>}/>
+            <Route path='/contacts' element={<Contacts/>}/>
+            <Route path='/login' element={<Login/>}/>
+        </Routes>
+        <Sidebar/>
+        </Router>
     )
 }
 export default App;
