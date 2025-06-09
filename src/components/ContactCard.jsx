@@ -5,3 +5,4 @@ const ContactCard=()=>{
         <h2>Contact Card</h2>
     )
 }
+export default ContactCard;
