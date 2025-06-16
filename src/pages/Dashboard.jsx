@@ -4,7 +4,7 @@ import ContactCard from '../components/ContactCard';
 
 const Dashboard=()=>{
     return(
-        <h2>Dashboard</h2>
+        <ContactCard/>
     )
 }
 export default Dashboard;

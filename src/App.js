@@ -1,21 +1,27 @@
 import React from 'react';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import Navbar from './components/Navbar';
+import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
 import Contacts from './pages/Contacts';
 import Login from './pages/Login'
-import Sidebar from './components/Sidebar';
 
 function App(){
     return(
         <Router>
         <Navbar/>
-        <Routes>
+        <div className='d-flex'>
+        <Sidebar/>
+        <div className='p-4 flex-grow-1'>
+            <Routes>
             <Route path='/' element={<Dashboard/>}/>
             <Route path='/contacts' element={<Contacts/>}/>
             <Route path='/login' element={<Login/>}/>
         </Routes>
-        <Sidebar/>
+        </div>
+            
+        </div>
+        
         </Router>
     )
 }
