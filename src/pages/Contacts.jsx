@@ -1,7 +1,8 @@
 import React,{useState} from 'react';
+import ContactForm from '../components/ContactForm'
 
 const Contacts=()=>{
-        const [contacts]=useState([
+        const [contacts,setContacts]=useState([
             {id:1,name:'Vikram Singh Rana',email:'vikramentech@gmail.com',
                 phone:'1234567890'
             }, {id:2,name:'Priya Sharma',email:'priyasharma@gmail.com',
@@ -15,10 +16,15 @@ const Contacts=()=>{
             },
             
         ])
+        const handleAddContact=(newContact)=>{
+            const updatedList=[...contacts,{id:Date.now(),...newContact}]
+            setContacts(updatedList);
+        }
 
     return(
         <div className='container mt-4'>
             <h2 className='mb-4'>Contacts</h2>
+            <ContactForm onAdd={handleAddContact}/>
             <div className='row'>
                 {contacts.map((contact)=>(
                 <div className='col-md-4 mb-3' key={contact.id}>

@@ -1,10 +1,9 @@
 import React from 'react';
 import Navbar from '../components/Navbar';
-import ContactCard from '../components/ContactCard';
 
 const Dashboard=()=>{
     return(
-        <ContactCard/>
+        <h2>dashboard</h2>
     )
 }
 export default Dashboard;
