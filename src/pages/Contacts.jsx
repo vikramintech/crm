@@ -20,7 +20,10 @@ const Contacts=()=>{
             const updatedList=[...contacts,{id:Date.now(),...newContact}]
             setContacts(updatedList);
         }
-
+        const handleDeleteContact=(id)=>{
+            const updatedList= contacts.filter(contact=>contact.id!==id);
+            setContacts(updatedList);
+        }
     return(
         <div className='container mt-4'>
             <h2 className='mb-4'>Contacts</h2>
@@ -34,7 +37,8 @@ const Contacts=()=>{
                             <p className='card-text'><strong>Email: </strong>{contact.email}</p>
                             <p className='card-text'><strong>Phone: </strong>{contact.phone}</p>
                             <button className='btn btn-sm btn-outline-primary me-2'>Edit</button>
-                            <button className='btn btn-sm btn-outline-danger'>Delete</button>
+                            <button className='btn btn-sm btn-outline-danger'
+                            onClick={()=>handleDeleteContact(contact.id)}>Delete</button>
                         </div>
                     </div>
 
