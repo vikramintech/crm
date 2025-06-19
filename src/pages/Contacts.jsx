@@ -16,7 +16,7 @@ const Contacts=()=>{
             },
             
         ])
-
+    
         const[selectedContact,setSelectedContact]=useState(null);
         const[searchTerm,setSearchTerm]=useState('');
 
@@ -53,7 +53,8 @@ const Contacts=()=>{
             return(
             contact.name.toLowerCase().includes(term)||
             contact.email.toLowerCase().includes(term)||
-            contact.phone.toLowerCase().includes(term)
+            contact.phone.toLowerCase().includes(term)||
+            contact.tag.toLowerCase().includes(term)
 
             )})
     return(
@@ -61,7 +62,7 @@ const Contacts=()=>{
             <h2 className='mb-4'>Contacts</h2>
             <ContactForm onAdd={handleAddContact} onUpdate={handleUpdateContact} selectedContact={selectedContact} clearSelectedContact={()=>{setSelectedContact(null)}}/>
            <div className='mb-3'>
-            <input type="text" className='form-control' placeholder='Search by Name, Email, Phone' value={searchTerm} onChange={(e)=>setSearchTerm(e.target.value)}/>
+            <input type="text" className='form-control' placeholder='Search by Name, Email, Phone, Tag' value={searchTerm} onChange={(e)=>setSearchTerm(e.target.value)}/>
            </div>
             <div className='row'>
                 {filteredContacts.length>0?(
