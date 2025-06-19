@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useEffect,useState} from 'react';
 import ContactForm from '../components/ContactForm'
 
 const Contacts=()=>{
@@ -16,6 +16,21 @@ const Contacts=()=>{
             },
             
         ])
+
+        const[selectedContact,setSelectedContact]=useState(null);
+
+        // Local Storage: Load
+        useEffect(()=>{
+            const storedContacts= JSON.parse(localStorage.getItem('contacts'));
+            if(storedContacts){
+                setContacts(storedContacts);
+            }
+        },[])
+        // Local Storage: Save
+        useEffect(()=>{
+            localStorage.setItem('contacts',JSON.stringify(contacts));
+        },[contacts])
+        console.log('checking error:',contacts);
         const handleAddContact=(newContact)=>{
             const updatedList=[...contacts,{id:Date.now(),...newContact}]
             setContacts(updatedList);
@@ -24,10 +39,19 @@ const Contacts=()=>{
             const updatedList= contacts.filter(contact=>contact.id!==id);
             setContacts(updatedList);
         }
+        const handleEditContact=(contact)=>{
+            setSelectedContact(contact);
+        }
+
+        const handleUpdateContact=(updatedContact)=>{
+            const updatedList=contacts.map(contact=>contact.id===updatedContact.id?updatedContact:contact)
+            setContacts(updatedList);
+        }
     return(
         <div className='container mt-4'>
             <h2 className='mb-4'>Contacts</h2>
-            <ContactForm onAdd={handleAddContact}/>
+            <ContactForm onAdd={handleAddContact} onUpdate={handleUpdateContact} selectedContact={selectedContact} clearSelectedContact={()=>{setSelectedContact(null)}}/>
+           
             <div className='row'>
                 {contacts.map((contact)=>(
                 <div className='col-md-4 mb-3' key={contact.id}>
@@ -36,7 +60,7 @@ const Contacts=()=>{
                             <h5 className='card-title'>{contact.name}</h5>
                             <p className='card-text'><strong>Email: </strong>{contact.email}</p>
                             <p className='card-text'><strong>Phone: </strong>{contact.phone}</p>
-                            <button className='btn btn-sm btn-outline-primary me-2'>Edit</button>
+                            <button className='btn btn-sm btn-outline-primary me-2' onClick={()=>handleEditContact(contact)}>Edit</button>
                             <button className='btn btn-sm btn-outline-danger'
                             onClick={()=>handleDeleteContact(contact.id)}>Delete</button>
                         </div>

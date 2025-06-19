@@ -1,6 +1,6 @@
-import React,{useState} from 'react';
+import React,{useEffect,useState} from 'react';
 
-const ContactForm=({onAdd})=>{
+const ContactForm=({onAdd, onUpdate, selectedContact, clearSelectedContact})=>{
    const[formData,setFormData]=useState({
     name:'',
     email:'',
@@ -15,13 +15,18 @@ const ContactForm=({onAdd})=>{
 
    const handleOnSubmit=(e)=>{
     e.preventDefault();
-    if(formData.name && formData.email&&formData.phone){
-        onAdd(formData);
-        setFormData({name:'',email:'',phone:''})
-    }else{
-        alert("please fill all fields")
+    if(!formData.name || !formData.email||!formData.phone){
+        return alert('Please fill all the fields')
     }
-   }
+    if(selectedContact){
+        onUpdate({...selectedContact,...formData})
+     }else{ 
+        onAdd(formData);
+     }
+        setFormData({name:'',email:'',phone:''})
+        clearSelectedContact();
+    }
+   
 return(
     <form onSubmit={handleOnSubmit} className='mb-4'>
         <div className='mb-3'>
@@ -36,7 +41,8 @@ return(
             <label className='form-label'>Phone</label>
             <input type="text" name='phone' value={formData.phone} onChange={handleOnChange} placeholder='Enter Phone Number' className='form-control' />
         </div>
-        <button type='submit' className='btn btn-primary'>Add Contact</button>
+        <button type='submit' className='btn btn-primary'>{selectedContact?"Update Contact":"Add Contact"}</button>
+        {selectedContact&&(<button type='button'className='btn btn-secondary' onClick={clearSelectedContact}>Cancel</button>)}
     </form>
 )
 }
