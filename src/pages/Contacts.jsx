@@ -18,6 +18,7 @@ const Contacts=()=>{
         ])
 
         const[selectedContact,setSelectedContact]=useState(null);
+        const[searchTerm,setSearchTerm]=useState('');
 
         // Local Storage: Load
         useEffect(()=>{
@@ -30,7 +31,6 @@ const Contacts=()=>{
         useEffect(()=>{
             localStorage.setItem('contacts',JSON.stringify(contacts));
         },[contacts])
-        console.log('checking error:',contacts);
         const handleAddContact=(newContact)=>{
             const updatedList=[...contacts,{id:Date.now(),...newContact}]
             setContacts(updatedList);
@@ -47,13 +47,24 @@ const Contacts=()=>{
             const updatedList=contacts.map(contact=>contact.id===updatedContact.id?updatedContact:contact)
             setContacts(updatedList);
         }
+        const filteredContacts= contacts.filter(contact=>{
+            const term=searchTerm.toLowerCase();
+            return(
+            contact.name.toLowerCase().includes(term)||
+            contact.email.toLowerCase().includes(term)||
+            contact.phone.toLowerCase().includes(term)
+
+            )})
     return(
         <div className='container mt-4'>
             <h2 className='mb-4'>Contacts</h2>
             <ContactForm onAdd={handleAddContact} onUpdate={handleUpdateContact} selectedContact={selectedContact} clearSelectedContact={()=>{setSelectedContact(null)}}/>
-           
+           <div className='mb-3'>
+            <input type="text" className='form-control' placeholder='Search by Name, Email, Phone' value={searchTerm} onChange={(e)=>setSearchTerm(e.target.value)}/>
+           </div>
             <div className='row'>
-                {contacts.map((contact)=>(
+                {filteredContacts.length>0?(
+                filteredContacts.map((contact)=>(
                 <div className='col-md-4 mb-3' key={contact.id}>
                     <div className='card shadow-sm'>
                         <div className='card-body'>
@@ -67,7 +78,8 @@ const Contacts=()=>{
                     </div>
 
                 </div>
-            ))}</div>
+            ))):(<div className='text-muted'>No Contact found</div>)}
+            </div>
         </div>
     )
 }
