@@ -4,15 +4,15 @@ import ContactForm from '../components/ContactForm'
 const Contacts=()=>{
         const [contacts,setContacts]=useState([
             {id:1,name:'Vikram Singh Rana',email:'vikramentech@gmail.com',
-                phone:'1234567890'
+                phone:'1234567890', tag:'Client'
             }, {id:2,name:'Priya Sharma',email:'priyasharma@gmail.com',
-                phone:'1234567880'
+                phone:'1234567880', tag:'Lead'
             }, {id:3,name:'Aman Gupta',email:'amangupta@gmail.com',
-                phone:'1234566890'
+                phone:'1234566890', tag:'Supplier'
             }, {id:4,name:'Aish',email:'Aishtax@gmail.com',
-                phone:'1234545890'
+                phone:'1234545890', tag:'Client'
             }, {id:5,name:'Jatin',email:'jatin@gmail.com',
-                phone:'1244567890'
+                phone:'1244567890', tag:'Lead'
             },
             
         ])
@@ -27,6 +27,7 @@ const Contacts=()=>{
                 setContacts(storedContacts);
             }
         },[])
+        console.log(contacts)
         // Local Storage: Save
         useEffect(()=>{
             localStorage.setItem('contacts',JSON.stringify(contacts));
@@ -71,12 +72,12 @@ const Contacts=()=>{
                             <h5 className='card-title'>{contact.name}</h5>
                             <p className='card-text'><strong>Email: </strong>{contact.email}</p>
                             <p className='card-text'><strong>Phone: </strong>{contact.phone}</p>
+                            <p><strong>Tag: </strong>{contact.tag}</p>
                             <button className='btn btn-sm btn-outline-primary me-2' onClick={()=>handleEditContact(contact)}>Edit</button>
                             <button className='btn btn-sm btn-outline-danger'
                             onClick={()=>handleDeleteContact(contact.id)}>Delete</button>
                         </div>
                     </div>
-
                 </div>
             ))):(<div className='text-muted'>No Contact found</div>)}
             </div>
