@@ -73,7 +73,7 @@ const Contacts=()=>{
                             <h5 className='card-title'>{contact.name}</h5>
                             <p className='card-text'><strong>Email: </strong>{contact.email}</p>
                             <p className='card-text'><strong>Phone: </strong>{contact.phone}</p>
-                            <p><strong>Tag: </strong>{contact.tag}</p>
+                            <p className='card-text'><strong>Tag: </strong>{contact.tag}</p>
                             <button className='btn btn-sm btn-outline-primary me-2' onClick={()=>handleEditContact(contact)}>Edit</button>
                             <button className='btn btn-sm btn-outline-danger'
                             onClick={()=>handleDeleteContact(contact.id)}>Delete</button>

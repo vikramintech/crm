@@ -21,7 +21,7 @@ const ContactForm=({onAdd, onUpdate, selectedContact, clearSelectedContact})=>{
 
    const handleOnSubmit=(e)=>{
     e.preventDefault();
-    if(!formData.name || !formData.email||!formData.phone){
+    if(!formData.name || !formData.email||!formData.phone||formData.tag){
         return alert('Please fill all the fields')
     }
     if(selectedContact){
@@ -29,7 +29,7 @@ const ContactForm=({onAdd, onUpdate, selectedContact, clearSelectedContact})=>{
      }else{ 
         onAdd(formData);
      }
-        setFormData({name:'',email:'',phone:''})
+        setFormData({name:'',email:'',phone:'',tag:''})
         clearSelectedContact();
     }
    
