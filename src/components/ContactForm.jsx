@@ -13,12 +13,23 @@ const ContactForm=({onAdd, onUpdate, selectedContact, clearSelectedContact})=>{
     }
    },[selectedContact])
    const handleOnChange=(e)=>{
+    const{name,value}=e.target;
     setFormData(prev=>({
         ...prev,
-        [e.target.name]:e.target.value
+        [name]:value
     }));
    }
+// suggestion only for tag input
+if(name==='tag'){
+    const matches =allTags.filter((tag)=>tag.toLowerCase().startsWith(value.toLowerCase())).filter((tag)=>tag!==value);
+    setTagSuggestion(value?matches:[]);
+}
 
+const handleSuggestedTagClick=(suggestion)=>{
+    setFormData((prev)=>({...prev,tag:suggestion}))
+    setSuggestionTag([]);
+
+}
    const handleOnSubmit=(e)=>{
     e.preventDefault();
     if(!formData.name || !formData.email||!formData.phone||!formData.tag){
@@ -51,6 +62,14 @@ return(
             <label className='form-label' >Select Tag</label>
             <input type='text' name='tag' className='form-control' value={formData.tag} onChange={handleOnChange} placeholder='e.g client, lead, supplier' />
         </div>
+        {/* suggestion dropdown */}
+        {tagSuggestion.length>0&&(
+            <div className='list-group positon-absolute w-100 z-1 shadow-sm'>{tagSuggestions.map((suggestion,index)=>(
+                <button type='button' key={index} className='list-group-item list-group-item-action' onClick={()=>handleSuggestedTagClick(suggestion)}> 
+                    {suggestion}
+                </button>
+            ))}</div>
+        )}
         <button type='submit' className='btn btn-primary'>{selectedContact?"Update Contact":"Add Contact"}</button>
         {selectedContact&&(<button type='button'className='btn btn-secondary' onClick={clearSelectedContact}>Cancel</button>)}
     </form>

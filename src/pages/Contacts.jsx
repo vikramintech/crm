@@ -51,13 +51,13 @@ const Contacts=()=>{
         }
         const filteredContacts= contacts.filter(contact=>{
             const term=searchTerm.toLowerCase();
-            const matchedSearch=
+            const isSearchMatched=
             contact.name.toLowerCase().includes(term)||
             contact.email.toLowerCase().includes(term)||
             contact.phone.toLowerCase().includes(term)||
             contact.tag.toLowerCase().includes(term)
-            const matchesTag= activeTag?contact.tag===activeTag:true;
-            return matchedSearch && matchesTag;
+            const isTagMatched= activeTag?contact.tag===activeTag:true;
+            return isSearchMatched && isTagMatched;
             })
             const allTags=[...new Set(contacts.map((contact)=>contact.tag).filter(Boolean))]
     return(
