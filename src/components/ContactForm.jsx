@@ -5,11 +5,11 @@ const ContactForm=({onAdd, onUpdate, selectedContact, clearSelectedContact})=>{
     name:'',
     email:'',
     phone:'',
-    tag:'Lead'
+    tag:''
    })
    useEffect(()=>{
     if(selectedContact){
-        setFormData({name:selectedContact.name,email:selectedContact.email,phone:selectedContact.phone,tag:selectedContact.tag||'Lead'})
+        setFormData({name:selectedContact.name,email:selectedContact.email,phone:selectedContact.phone,tag:selectedContact.tag||''})
     }
    },[selectedContact])
    const handleOnChange=(e)=>{
@@ -21,7 +21,7 @@ const ContactForm=({onAdd, onUpdate, selectedContact, clearSelectedContact})=>{
 
    const handleOnSubmit=(e)=>{
     e.preventDefault();
-    if(!formData.name || !formData.email||!formData.phone||formData.tag){
+    if(!formData.name || !formData.email||!formData.phone||!formData.tag){
         return alert('Please fill all the fields')
     }
     if(selectedContact){
@@ -49,11 +49,7 @@ return(
         </div>
         <div className='mb-3'>
             <label className='form-label' >Select Tag</label>
-            <select name='tag' className='form-select' value={formData.tag} onChange={handleOnChange}>
-                <option value="Lead">Lead</option>
-                <option value="Client">Client</option>
-                <option value="Supplier">Supplier</option>
-            </select>
+            <input type='text' name='tag' className='form-control' value={formData.tag} onChange={handleOnChange} placeholder='e.g client, lead, supplier' />
         </div>
         <button type='submit' className='btn btn-primary'>{selectedContact?"Update Contact":"Add Contact"}</button>
         {selectedContact&&(<button type='button'className='btn btn-secondary' onClick={clearSelectedContact}>Cancel</button>)}

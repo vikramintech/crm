@@ -4,15 +4,15 @@ import ContactForm from '../components/ContactForm'
 const Contacts=()=>{
         const [contacts,setContacts]=useState([
             {id:1,name:'Vikram Singh Rana',email:'vikramentech@gmail.com',
-                phone:'1234567890', tag:'Client'
+                phone:'1234567890', tag:''
             }, {id:2,name:'Priya Sharma',email:'priyasharma@gmail.com',
-                phone:'1234567880', tag:'Lead'
+                phone:'1234567880', tag:''
             }, {id:3,name:'Aman Gupta',email:'amangupta@gmail.com',
-                phone:'1234566890', tag:'Supplier'
-            }, {id:4,name:'Aish',email:'Aishtax@gmail.com',
-                phone:'1234545890', tag:'Client'
+                phone:'1234566890', tag:''
+            }, {id:4,name:'Aish',email:'',
+                phone:'1234545890', tag:''
             }, {id:5,name:'Jatin',email:'jatin@gmail.com',
-                phone:'1244567890', tag:'Lead'
+                phone:'1244567890', tag:''
             },
             
         ])
