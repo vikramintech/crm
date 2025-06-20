@@ -19,6 +19,7 @@ const Contacts=()=>{
     
         const[selectedContact,setSelectedContact]=useState(null);
         const[searchTerm,setSearchTerm]=useState('');
+        const[activeTag,setActiveTag]=useState('');
 
         // Local Storage: Load
         useEffect(()=>{
@@ -50,20 +51,37 @@ const Contacts=()=>{
         }
         const filteredContacts= contacts.filter(contact=>{
             const term=searchTerm.toLowerCase();
-            return(
+            const matchedSearch=
             contact.name.toLowerCase().includes(term)||
             contact.email.toLowerCase().includes(term)||
             contact.phone.toLowerCase().includes(term)||
             contact.tag.toLowerCase().includes(term)
-
-            )})
+            const matchesTag= activeTag?contact.tag===activeTag:true;
+            return matchedSearch && matchesTag;
+            })
+            const allTags=[...new Set(contacts.map((contact)=>contact.tag).filter(Boolean))]
     return(
         <div className='container mt-4'>
             <h2 className='mb-4'>Contacts</h2>
+            
             <ContactForm onAdd={handleAddContact} onUpdate={handleUpdateContact} selectedContact={selectedContact} clearSelectedContact={()=>{setSelectedContact(null)}}/>
+           {/* search */}
            <div className='mb-3'>
             <input type="text" className='form-control' placeholder='Search by Name, Email, Phone, Tag' value={searchTerm} onChange={(e)=>setSearchTerm(e.target.value)}/>
            </div>
+           {/* tag filters */}
+           {allTags.length>0 &&(
+            <div className='mb-4'>
+                <strong>Filter by Tag: </strong>
+                <div className='d-flex flex-wrap gap-2 mt-2'>{allTags.map((tag)=>(
+                    <span key={tag} className={`badge rounded-pill text-bg-${tag===activeTag?'primary':'secondary'}`} style={{cursor:'pointer'}} onClick={()=>setActiveTag(tag)}>{tag}</span>
+                ))}
+                {activeTag && (
+                <span className='badge bg-danger' style={{cursor:'pointer'}} onClick={()=>setActiveTag('')}>Clear Filter</span>
+                )}
+                </div>
+            </div>
+           )}
             <div className='row'>
                 {filteredContacts.length>0?(
                 filteredContacts.map((contact)=>(
