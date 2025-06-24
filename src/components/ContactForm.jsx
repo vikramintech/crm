@@ -1,12 +1,15 @@
 import React,{useEffect,useState} from 'react';
 
-const ContactForm=({onAdd, onUpdate, selectedContact, clearSelectedContact})=>{
+const ContactForm=({onAdd, onUpdate, selectedContact, clearSelectedContact, allTags})=>{
    const[formData,setFormData]=useState({
     name:'',
     email:'',
     phone:'',
     tag:''
    })
+   const[tagSuggestions,setTagSuggestions]=useState([])
+   let value=''
+   let name=''
    useEffect(()=>{
     if(selectedContact){
         setFormData({name:selectedContact.name,email:selectedContact.email,phone:selectedContact.phone,tag:selectedContact.tag||''})
@@ -18,16 +21,19 @@ const ContactForm=({onAdd, onUpdate, selectedContact, clearSelectedContact})=>{
         ...prev,
         [name]:value
     }));
-   }
-// suggestion only for tag input
-if(name==='tag'){
+    
+     
+     // suggestion only for tag input
+    if(name==='tag'){
     const matches =allTags.filter((tag)=>tag.toLowerCase().startsWith(value.toLowerCase())).filter((tag)=>tag!==value);
-    setTagSuggestion(value?matches:[]);
-}
+    setTagSuggestions(value?matches:[]);
+    }
+     }
+
 
 const handleSuggestedTagClick=(suggestion)=>{
-    setFormData((prev)=>({...prev,tag:suggestion}))
-    setSuggestionTag([]);
+    setFormData((prev)=>({...prev,'tag':suggestion}))
+    setTagSuggestions([]);
 
 }
    const handleOnSubmit=(e)=>{
@@ -63,7 +69,7 @@ return(
             <input type='text' name='tag' className='form-control' value={formData.tag} onChange={handleOnChange} placeholder='e.g client, lead, supplier' />
         </div>
         {/* suggestion dropdown */}
-        {tagSuggestion.length>0&&(
+        {tagSuggestions.length>0&&(
             <div className='list-group positon-absolute w-100 z-1 shadow-sm'>{tagSuggestions.map((suggestion,index)=>(
                 <button type='button' key={index} className='list-group-item list-group-item-action' onClick={()=>handleSuggestedTagClick(suggestion)}> 
                     {suggestion}
