@@ -1,19 +1,22 @@
 import React,{useEffect,useState} from 'react';
+import {useAuth} from '../contexts/AuthContext';
+import {addContact,getUserContacts, updateContact,deleteContact} from '../services/contactService';
 import ContactForm from '../components/ContactForm'
 
 const Contacts=()=>{
+    const{currentUser}=useAuth();
         const [contacts,setContacts]=useState([
-            {id:1,name:'Vikram Singh Rana',email:'vikramentech@gmail.com',
-                phone:'1234567890', tag:''
-            }, {id:2,name:'Priya Sharma',email:'priyasharma@gmail.com',
-                phone:'1234567880', tag:''
-            }, {id:3,name:'Aman Gupta',email:'amangupta@gmail.com',
-                phone:'1234566890', tag:''
-            }, {id:4,name:'Aish',email:'',
-                phone:'1234545890', tag:''
-            }, {id:5,name:'Jatin',email:'jatin@gmail.com',
-                phone:'1244567890', tag:''
-            },
+            // {id:1,name:'Vikram Singh Rana',email:'vikramentech@gmail.com',
+            //     phone:'1234567890', tag:''
+            // }, {id:2,name:'Priya Sharma',email:'priyasharma@gmail.com',
+            //     phone:'1234567880', tag:''
+            // }, {id:3,name:'Aman Gupta',email:'amangupta@gmail.com',
+            //     phone:'1234566890', tag:''
+            // }, {id:4,name:'Aish',email:'',
+            //     phone:'1234545890', tag:''
+            // }, {id:5,name:'Jatin',email:'jatin@gmail.com',
+            //     phone:'1244567890', tag:''
+            // },
             
         ])
     
@@ -28,28 +31,40 @@ const Contacts=()=>{
             Partner:'info',
             Investor:'dark'
         }
+        const loadContacts=async()=>{
+            if(!currentUser) return;
+            const userContacts=await getUserContacts(currentUser.uid);
+            setContacts(userContacts);
+        }
         // Local Storage: Load
         useEffect(()=>{
-            const storedContacts= JSON.parse(localStorage.getItem('contacts'));
-            if(storedContacts){
-                setContacts(storedContacts);
-            }
+            // const storedContacts= JSON.parse(localStorage.getItem('contacts'));
+            // if(storedContacts){
+            //     setContacts(storedContacts);
+            // }
+            loadContacts();
         },[])
         console.log(contacts)
-        // Local Storage: Save
-        useEffect(()=>{
-            localStorage.setItem('contacts',JSON.stringify(contacts));
-        },[contacts])
-        const handleAddContact=(newContact)=>{
-            const updatedList=[...contacts,{id:Date.now(),...newContact}]
-            setContacts(updatedList);
+        // // Local Storage: Save
+        // useEffect(()=>{
+        //     localStorage.setItem('contacts',JSON.stringify(contacts));
+        // },[contacts])
+        const handleAddContact=async(newContact)=>{
+            // const updatedList=[...contacts,{id:Date.now(),...newContact}]
+            await addContact(newContact,currentUser.uid)
+            // setContacts(updatedList);
+         loadContacts();   
         }
-        const handleDeleteContact=(id)=>{
-            const updatedList= contacts.filter(contact=>contact.id!==id);
-            setContacts(updatedList);
+        const handleDeleteContact=async(id)=>{
+            // const updatedList= contacts.filter(contact=>contact.id!==id);
+            // setContacts(updatedList);
+            await deleteContact(id);
+            loadContacts();
         }
-        const handleEditContact=(contact)=>{
-            setSelectedContact(contact);
+        const handleEditContact=async(id,updated)=>{
+            // setSelectedContact(contact);
+            await updateContact(id,updated);
+            loadContacts();
         }
 
         const handleUpdateContact=(updatedContact)=>{
