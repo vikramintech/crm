@@ -29,7 +29,7 @@ const Navbar=()=>{
                         
                         </>
                 
-                   ):<li className="nav-item"><button onClick={{handleLogout}} className="btn btn-sm btn-outline-light">Logout</button></li>}
+                   ):<li className="nav-item"><button onClick={()=>handleLogout()} className="btn btn-sm btn-outline-light">Logout</button></li>}
                    </ul> 
             </div>
             
