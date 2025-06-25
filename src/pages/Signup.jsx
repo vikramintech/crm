@@ -21,21 +21,25 @@ const Signup=()=>{
     };
 
     return(
-        <div>
-            <h2>Create Account</h2>
-            {error && <div>{error}</div>}
-            <form>
-                <div>
+        <div className='container mt-5' style={{maxWidth:'400px'}}>
+            <h2 className='mb-4'>Create Account</h2>
+            {error && <div className='alert alert-danger'>{error}</div>}
+            <form onSubmit={handleSingup}>
+                <div className='mb-3'>
                     <label >
-                        <input type="email" value={email} required />
+                        Email
                     </label>
+                        <input type="email" className='form-control' onChange={(e)=>setEmail(e.target.value)} value={email} required />
+
                 </div>
-                <div>
+                <div className='mb-3'>
                     <label >
-                        <input type="password" value={password} required />
+                        Password
                     </label>
+                        <input type="password" className='form-control' onChange={(e)=>setPassword(e.target.value)}value={password} required />
+
                 </div>
-                <button type='submit'>Sign Up</button>
+                <button type='submit' className='btn btn-primary w-100'>Sign Up</button>
             </form>
         </div>
     )
