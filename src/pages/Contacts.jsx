@@ -5,20 +5,7 @@ import ContactForm from '../components/ContactForm'
 
 const Contacts=()=>{
     const{currentUser}=useAuth();
-        const [contacts,setContacts]=useState([
-            // {id:1,name:'Vikram Singh Rana',email:'vikramentech@gmail.com',
-            //     phone:'1234567890', tag:''
-            // }, {id:2,name:'Priya Sharma',email:'priyasharma@gmail.com',
-            //     phone:'1234567880', tag:''
-            // }, {id:3,name:'Aman Gupta',email:'amangupta@gmail.com',
-            //     phone:'1234566890', tag:''
-            // }, {id:4,name:'Aish',email:'',
-            //     phone:'1234545890', tag:''
-            // }, {id:5,name:'Jatin',email:'jatin@gmail.com',
-            //     phone:'1244567890', tag:''
-            // },
-            
-        ])
+        const [contacts,setContacts]=useState([]);
     
         const[selectedContact,setSelectedContact]=useState(null);
         const[searchTerm,setSearchTerm]=useState('');
@@ -30,12 +17,13 @@ const Contacts=()=>{
             Supplier:'warning',
             Partner:'info',
             Investor:'dark'
-        }
+        };
         const loadContacts=async()=>{
             if(!currentUser) return;
             const userContacts=await getUserContacts(currentUser.uid);
             setContacts(userContacts);
-        }
+        };
+        
         // Local Storage: Load
         useEffect(()=>{
             // const storedContacts= JSON.parse(localStorage.getItem('contacts'));
@@ -43,34 +31,59 @@ const Contacts=()=>{
             //     setContacts(storedContacts);
             // }
             loadContacts();
-        },[])
-        console.log(contacts)
+        },[]);
+        console.log(contacts);
         // // Local Storage: Save
         // useEffect(()=>{
         //     localStorage.setItem('contacts',JSON.stringify(contacts));
         // },[contacts])np
         const handleAddContact=async(newContact)=>{
             // const updatedList=[...contacts,{id:Date.now(),...newContact}]
+            try{
             await addContact(newContact,currentUser.uid)
-            // setContacts(updatedList);
          loadContacts();   
-        }
+                
+            }catch(error){
+                if(error.code === 'permission-denied')
+                alert("you don't have permission to perform this action")
+            }
+            // setContacts(updatedList);
+        };
         const handleDeleteContact=async(id)=>{
             // const updatedList= contacts.filter(contact=>contact.id!==id);
             // setContacts(updatedList);
-            await deleteContact(id);
+            try{
+                await deleteContact(id);
             loadContacts();
-        }
+            }catch(error){
+                if(error.code === 'permission-denied')
+                alert("you don't have permission to perform this action")
+            }
+            
+        };
         const handleUpdateContact=async(id,updated)=>{
-            await updateContact(id,updated);
+            try{
+                await updateContact(id,updated);
             loadContacts();
-        }
+            }catch(error){
+                if(error.code === 'permission-denied')
+                alert("you don't have permission to perform this action")
+            }
+            
+        };
         
         const handleEditContact=async(updatedContact)=>{
+            try{
             setSelectedContact(updatedContact)
-        }
+
+            }catch(error){
+                if(error.code==='permission-denied'){
+                    alert("you don't have permission to perform this action")
+                }
+            }
+        };
         const clearSelectedContact=()=>
-            {setSelectedContact(null)}
+            {setSelectedContact(null)};
        
         const filteredContacts= contacts.filter(contact=>{
             const term=searchTerm.toLowerCase();
@@ -86,8 +99,8 @@ const Contacts=()=>{
             })
             const getTagColor=(tag)=>{
                 return tagColors[tag]||'secondary'
-            }
-            const allTags=[...new Set(contacts.map((contact)=>contact.tag).filter(Boolean))]
+            };
+            const allTags=[...new Set(contacts.map((contact)=>contact.tag).filter(Boolean))];
             console.log(allTags);
     return(
         <div className='container mt-4'>

@@ -41,7 +41,8 @@ const handleOnCancel=()=>{
 
 }
    const handleOnSubmit=(e)=>{
-    e.preventDefault();
+    try{
+          e.preventDefault();
     if(!formData.name || !formData.email||!formData.phone||!formData.tag){
         return alert('Please fill all the fields')
     }
@@ -52,6 +53,12 @@ const handleOnCancel=()=>{
      }
         setFormData({name:'',email:'',phone:'',tag:''})
         clearSelectedContact();
+    }catch(error){
+        if(error.code ==="permission-denied"){
+            alert("You don't have permission to perform this action");
+        }
+    }
+  
     }
    
 return(
