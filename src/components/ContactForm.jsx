@@ -8,8 +8,7 @@ const ContactForm=({onAdd, onUpdate, selectedContact, clearSelectedContact, allT
     tag:''
    })
    const[tagSuggestions,setTagSuggestions]=useState([])
-   let value=''
-   let name=''
+
    useEffect(()=>{
     if(selectedContact){
         setFormData({name:selectedContact.name,email:selectedContact.email,phone:selectedContact.phone,tag:selectedContact.tag||''})
@@ -36,13 +35,18 @@ const handleSuggestedTagClick=(suggestion)=>{
     setTagSuggestions([]);
 
 }
+const handleOnCancel=()=>{
+    clearSelectedContact()
+ setFormData({name:'',email:'',phone:'',tag:''})
+
+}
    const handleOnSubmit=(e)=>{
     e.preventDefault();
     if(!formData.name || !formData.email||!formData.phone||!formData.tag){
         return alert('Please fill all the fields')
     }
     if(selectedContact){
-        onUpdate({...selectedContact,...formData})
+        onUpdate(selectedContact.id,{...selectedContact,...formData})
      }else{ 
         onAdd(formData);
      }
@@ -77,7 +81,7 @@ return(
             ))}</div>
         )}
         <button type='submit' className='btn btn-primary'>{selectedContact?"Update Contact":"Add Contact"}</button>
-        {selectedContact&&(<button type='button'className='btn btn-secondary' onClick={clearSelectedContact}>Cancel</button>)}
+        {selectedContact&&(<button type='button'className='btn btn-secondary ms-2' onClick={handleOnCancel}>Cancel</button>)}
     </form>
 )
 }

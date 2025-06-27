@@ -48,7 +48,7 @@ const Contacts=()=>{
         // // Local Storage: Save
         // useEffect(()=>{
         //     localStorage.setItem('contacts',JSON.stringify(contacts));
-        // },[contacts])
+        // },[contacts])np
         const handleAddContact=async(newContact)=>{
             // const updatedList=[...contacts,{id:Date.now(),...newContact}]
             await addContact(newContact,currentUser.uid)
@@ -61,23 +61,26 @@ const Contacts=()=>{
             await deleteContact(id);
             loadContacts();
         }
-        const handleEditContact=async(id,updated)=>{
-            // setSelectedContact(contact);
+        const handleUpdateContact=async(id,updated)=>{
             await updateContact(id,updated);
             loadContacts();
         }
-
-        const handleUpdateContact=(updatedContact)=>{
-            const updatedList=contacts.map(contact=>contact.id===updatedContact.id?updatedContact:contact)
-            setContacts(updatedList);
+        
+        const handleEditContact=async(updatedContact)=>{
+            setSelectedContact(updatedContact)
         }
+        const clearSelectedContact=()=>
+            {setSelectedContact(null)}
+       
         const filteredContacts= contacts.filter(contact=>{
             const term=searchTerm.toLowerCase();
+            console.log(term);
             const isSearchMatched=
             contact.name.toLowerCase().includes(term)||
             contact.email.toLowerCase().includes(term)||
             contact.phone.toLowerCase().includes(term)||
             contact.tag.toLowerCase().includes(term)
+            console.log(isSearchMatched);
             const isTagMatched= activeTag?contact.tag===activeTag:true;
             return isSearchMatched && isTagMatched;
             })
@@ -90,7 +93,7 @@ const Contacts=()=>{
         <div className='container mt-4'>
             <h2 className='mb-4'>Contacts</h2>
             
-            <ContactForm onAdd={handleAddContact} onUpdate={handleUpdateContact} selectedContact={selectedContact} clearSelectedContact={()=>{setSelectedContact(null)}} allTags={allTags}/>
+            <ContactForm onAdd={handleAddContact}  onUpdate={handleUpdateContact} selectedContact={selectedContact} clearSelectedContact={clearSelectedContact} allTags={allTags}/>
            {/* search */}
            <div className='mb-3'>
             <input type="text" className='form-control' placeholder='Search by Name, Email, Phone, Tag' value={searchTerm} onChange={(e)=>setSearchTerm(e.target.value)}/>

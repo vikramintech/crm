@@ -27,6 +27,6 @@ export const updateContact=async(id,updatedData)=>{
 // Delete
 
 export const deleteContact=async(id)=>{
-    const contactRef= doc(db,"contacs");
+    const contactRef= doc(db,"contacts",id);
     await deleteDoc(contactRef);
 };
