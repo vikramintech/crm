@@ -1,7 +1,8 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {signInWithEmailAndPassword} from 'firebase/auth';
 import {auth} from '../firebase';
 import {useNavigate} from 'react-router-dom';
+
 
 const Login=()=>{
     const[email,setEmail]=useState('');
@@ -9,11 +10,16 @@ const Login=()=>{
     const[error,setError]=useState(null);
     const navigate=useNavigate();
 
+    useEffect(()=>{
+    if(auth.currentUser){
+        navigate('/dashboard')
+    }
+},[])
     const handleLogin=async(e)=>{
         e.preventDefault();
         try{
             await signInWithEmailAndPassword(auth,email,password);
-            navigate('/');
+            navigate('/dashboard');
         }catch(err){
             setError(err.message);
         }
