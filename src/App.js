@@ -19,6 +19,8 @@ function App(){
         <Sidebar/>
         <div className='p-4 flex-grow-1'>
             <Routes>
+            <Route path='/' element={<PrivateRoute><Dashboard/></PrivateRoute>}/>
+
             <Route path='/dashboard' element={<PrivateRoute><Dashboard/></PrivateRoute>}/>
             <Route path='/contacts' element={<PrivateRoute><Contacts/></PrivateRoute>}/>
             <Route path='/login' element={<Login/>}/>
