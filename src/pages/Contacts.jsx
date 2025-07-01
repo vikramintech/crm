@@ -3,6 +3,7 @@ import {useAuth} from '../contexts/AuthContext';
 import {addContact,getUserContacts, updateContact,deleteContact} from '../services/contactService';
 import ContactForm from '../components/ContactForm';
 import {toast} from 'react-toastify';
+import handleExportToCSV from '../utils/exportContacts';
 
 const Contacts=()=>{
     const{currentUser}=useAuth();
@@ -162,6 +163,7 @@ const Contacts=()=>{
                 </div>
             ))):(<div className='text-muted'>No Contact found</div>)}
             </div>
+<button onClick={()=>{handleExportToCSV(contacts,toast)}} className="btn btn-outline-success mb-3">Export Contacts to CSV</button>
         </div>
     )
 }
