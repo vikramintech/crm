@@ -7,9 +7,10 @@ const Dashboard=()=>{
 
     useEffect(()=>{
         if(auth.currentUser){
-            fetchContacts();
+             fetchContacts();
         }
     },[])
+            console.log(contacts);
     
     const fetchContacts=async()=>{
         try{
@@ -30,6 +31,14 @@ const Dashboard=()=>{
 
     const recentContacts= [...contacts].sort( (a,b)=>b.createdAt?.seconds-a.createdAt?.seconds).slice(0,5);
     console.log(recentContacts);
+    console.log(contacts);
+    const tagCounts= contacts.reduce((acc,contact)=>{
+        if(contact.tag){
+            console.log((acc[contact.tag] || 0)+1);
+            acc[contact.tag]= (acc[contact.tag] || 0)+1;
+        }
+        return acc;
+    },{})
     return(
         <div className='container mt-4'>
             <h2>Dashboard</h2>
@@ -46,7 +55,18 @@ const Dashboard=()=>{
                         </div>
                     </div>
                 </div>
-            
+            <div className='row my-4' >
+                {Object.entries(tagCounts).map(([tag,count])=>(
+                <div  key={tag}className='col-md-3 mb-3'>
+                    <div className='card border-info h-100'>
+                        <div className='card-body text-center'>
+                            
+                                <h5 className='card-title'>{tag}</h5>
+                                <p className='card-text fs-4'>{count} contact</p>
+                        </div>
+                    </div>
+                </div>))}
+            </div>
             <div className='col-md-4'>
                 <div className='card text-white bg-success mb-3'>
                     <div className='card-body'>
