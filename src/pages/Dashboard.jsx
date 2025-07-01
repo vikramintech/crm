@@ -4,6 +4,7 @@ import {auth} from '../firebase';
 import {Chart as ChartJS,BarElement, CategoryScale, LinearScale,Tooltip,Legend,ArcElement} from 'chart.js';
 import {Bar} from 'react-chartjs-2';
 import {Pie} from 'react-chartjs-2';
+import chartOptions from '../config/chartoptions';
 
 
 ChartJS.register(BarElement,CategoryScale, LinearScale,Tooltip,Legend, ArcElement)
@@ -15,6 +16,10 @@ const Dashboard=()=>{
     useEffect(()=>{
         if(auth.currentUser){
              fetchContacts();
+        }
+        const storedChartType=localStorage.getItem('chartType');
+        if(storedChartType){
+            setChartType(storedChartType);
         }
     },[])
             console.log(contacts);
@@ -92,16 +97,21 @@ const Dashboard=()=>{
             </div>
             {/* toggle chart type */}
             <div className='form-check form-switch mb-3'>
-                <input className='form-check-input' type='checkbox' id="chartToggle" onChange={()=>setChartType((prev)=>(prev==='bar'?'pie':'bar'))}/>
+                <input className='form-check-input' type='checkbox' id="chartToggle" onChange={()=>{
+                    const newType=chartType==='bar'?'pie':'bar';
+                    setChartType(newType);
+                    localStorage.setItem('chartType',newType);
+                }}
+                    />
                     <label htmlFor="chartToggle" className='form-check-label' >Show {chartType==='bar'?'Pie':'Bar'} Chart</label>
             </div>
            {/* bar charts */}
-                 <h4 className='mt-4'>Tag Overview (Bar Chart)</h4>
-            <div className='col' style={{maxWidth:'600px'}}>
+                 <h4 className='mt-4'>Tag Overview ({chartType==='bar'?'Bar Graph':'Pie Chart'} )</h4>
+            <div className='col' style={{maxWidth:'700px'}}>
                 {chartType==='bar'?(
-                    <Bar data={chartData}/>
+                    <Bar data={chartData} options={chartOptions}/>
                 ):(
-                    <Pie data={chartData}/>
+                    <Pie data={chartData} options={chartOptions}/>
                 )}
             </div>
            
