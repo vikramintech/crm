@@ -1,6 +1,11 @@
 import React,{useState, useEffect} from 'react';
 import { getUserContacts } from '../services/contactService';
 import {auth} from '../firebase';
+import {Chart as ChartJS,BarElement, CategoryScale, LinearScale,Tooltip,Legend} from 'chart.js';
+import {Bar} from 'react-chartjs-2';
+
+
+ChartJS.register(BarElement,CategoryScale, LinearScale,Tooltip,Legend)
 
 const Dashboard=()=>{
     const[contacts,setContacts]=useState([]);
@@ -39,9 +44,24 @@ const Dashboard=()=>{
         }
         return acc;
     },{})
+
+    const chartData={
+        labels:Object.keys(tagCounts),
+        datasets:[
+            {
+                label:'Contacts per Tag',
+                data:Object.values(tagCounts),
+                backgroundColor:[
+                    '#od6efd','#198754','#dc3545','#fd7e14','#6f42c1'
+                ],
+                borderRadius:6
+            }
+        ]
+    }
     return(
         <div className='container mt-4'>
             <h2>Dashboard</h2>
+            {/* total contacts */}
             <div className='row my-4'>
                 <div className='col-md-4'>
                     <div className='card text-white bg-primary mb-3'>
@@ -55,6 +75,7 @@ const Dashboard=()=>{
                         </div>
                     </div>
                 </div>
+                {/* contacts count by tag */}
             <div className='row my-4' >
                 {Object.entries(tagCounts).map(([tag,count])=>(
                 <div  key={tag}className='col-md-3 mb-3'>
@@ -67,7 +88,14 @@ const Dashboard=()=>{
                     </div>
                 </div>))}
             </div>
-            <div className='col-md-4'>
+           
+                 <h4 className='mt-4'>Tag Overview (Bar Chart)</h4>
+            <div className='col' style={{maxWidth:'600px'}}>
+                <Bar data={chartData}/>
+            </div>
+           
+            {/* unique tag count */}
+            <div className='col-md-4 '>
                 <div className='card text-white bg-success mb-3'>
                     <div className='card-body'>
                         <h5 className='card-title'>
@@ -80,6 +108,7 @@ const Dashboard=()=>{
                 </div>
             </div>
         </div>
+        {/* top 5 recent contacts */}
         <h4>Recent Contacts</h4>
         <table className='table table-striped mt-2'>
             <thead>
