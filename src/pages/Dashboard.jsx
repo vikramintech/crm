@@ -1,14 +1,16 @@
 import React,{useState, useEffect} from 'react';
 import { getUserContacts } from '../services/contactService';
 import {auth} from '../firebase';
-import {Chart as ChartJS,BarElement, CategoryScale, LinearScale,Tooltip,Legend} from 'chart.js';
+import {Chart as ChartJS,BarElement, CategoryScale, LinearScale,Tooltip,Legend,ArcElement} from 'chart.js';
 import {Bar} from 'react-chartjs-2';
+import {Pie} from 'react-chartjs-2';
 
 
-ChartJS.register(BarElement,CategoryScale, LinearScale,Tooltip,Legend)
+ChartJS.register(BarElement,CategoryScale, LinearScale,Tooltip,Legend, ArcElement)
 
 const Dashboard=()=>{
     const[contacts,setContacts]=useState([]);
+    const[chartType,setChartType]=useState('bar');
 
     useEffect(()=>{
         if(auth.currentUser){
@@ -88,14 +90,23 @@ const Dashboard=()=>{
                     </div>
                 </div>))}
             </div>
-           
+            {/* toggle chart type */}
+            <div className='form-check form-switch mb-3'>
+                <input className='form-check-input' type='checkbox' id="chartToggle" onChange={()=>setChartType((prev)=>(prev==='bar'?'pie':'bar'))}/>
+                    <label htmlFor="chartToggle" className='form-check-label' >Show {chartType==='bar'?'Pie':'Bar'} Chart</label>
+            </div>
+           {/* bar charts */}
                  <h4 className='mt-4'>Tag Overview (Bar Chart)</h4>
             <div className='col' style={{maxWidth:'600px'}}>
-                <Bar data={chartData}/>
+                {chartType==='bar'?(
+                    <Bar data={chartData}/>
+                ):(
+                    <Pie data={chartData}/>
+                )}
             </div>
            
             {/* unique tag count */}
-            <div className='col-md-4 '>
+            <div className='col-md-4 ms-5 mt-5'>
                 <div className='card text-white bg-success mb-3'>
                     <div className='card-body'>
                         <h5 className='card-title'>
