@@ -2,13 +2,15 @@ import React from 'react';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import PrivateRoute from './routes/PrivateRoute';
 import {useAuth} from './contexts/AuthContext';
-
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
 import Contacts from './pages/Contacts';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import {ToastContainer} from 'react-toastify';
+import 'react-toastify/ReactToastify.css';
+
 
 function App(){
     const{currentUser}=useAuth();
@@ -17,6 +19,7 @@ function App(){
         <Navbar/>
         <div className='d-flex'>
         <Sidebar/>
+        <ToastContainer position='top-right' autoclose={3000}/>
         <div className='p-4 flex-grow-1'>
             <Routes>
             <Route path='/' element={<PrivateRoute><Dashboard/></PrivateRoute>}/>

@@ -1,7 +1,8 @@
 import React,{useEffect,useState} from 'react';
 import {useAuth} from '../contexts/AuthContext';
 import {addContact,getUserContacts, updateContact,deleteContact} from '../services/contactService';
-import ContactForm from '../components/ContactForm'
+import ContactForm from '../components/ContactForm';
+import {toast} from 'react-toastify';
 
 const Contacts=()=>{
     const{currentUser}=useAuth();
@@ -41,11 +42,12 @@ const Contacts=()=>{
             // const updatedList=[...contacts,{id:Date.now(),...newContact}]
             try{
             await addContact(newContact,currentUser.uid)
-         loadContacts();   
+                toast.success('contact added successfully!!')
+            loadContacts();   
                 
             }catch(error){
                 if(error.code === 'permission-denied')
-                alert("you don't have permission to perform this action")
+                toast.error("you don't have permission to perform this action")
             }
             // setContacts(updatedList);
         };
@@ -54,20 +56,22 @@ const Contacts=()=>{
             // setContacts(updatedList);
             try{
                 await deleteContact(id);
+                toast.success('contact deleted successfully');
             loadContacts();
             }catch(error){
                 if(error.code === 'permission-denied')
-                alert("you don't have permission to perform this action")
+                toast.error("you don't have permission to perform this action")
             }
             
         };
         const handleUpdateContact=async(id,updated)=>{
             try{
                 await updateContact(id,updated);
+                toast.success('contact updated successfully!!s')
             loadContacts();
             }catch(error){
                 if(error.code === 'permission-denied')
-                alert("you don't have permission to perform this action")
+                toast.error("you don't have permission to perform this action")
             }
             
         };
@@ -78,7 +82,7 @@ const Contacts=()=>{
 
             }catch(error){
                 if(error.code==='permission-denied'){
-                    alert("you don't have permission to perform this action")
+                    toast.error("you don't have permission to perform this action")
                 }
             }
         };
