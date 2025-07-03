@@ -12,7 +12,7 @@ ChartJS.register(BarElement,CategoryScale, LinearScale,Tooltip,Legend, ArcElemen
 const Dashboard=()=>{
     const[contacts,setContacts]=useState([]);
     const[chartType,setChartType]=useState('bar');
-
+    const[activityLog,setActivityLog]=useState([]);
     useEffect(()=>{
         if(auth.currentUser){
              fetchContacts();
@@ -65,6 +65,12 @@ const Dashboard=()=>{
             }
         ]
     }
+
+    const logActivity=(message)=>{
+        const timestamp= new Date().toLocaleString();
+        setActivityLog(prev=>[{message,timestamp},...prev.slice(0,9)]);
+
+    };
     return(
         <div className='container mt-4'>
             <h2>Dashboard</h2>
