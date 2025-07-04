@@ -4,15 +4,15 @@ import {auth} from '../firebase';
 import {Chart as ChartJS,BarElement, CategoryScale, LinearScale,Tooltip,Legend,ArcElement} from 'chart.js';
 import {Bar} from 'react-chartjs-2';
 import {Pie} from 'react-chartjs-2';
-import chartOptions from '../utils/chartoptions';;
-
+import chartOptions from '../utils/chartoptions';
+import {useActivity} from '../contexts/ActivityContext';
 
 ChartJS.register(BarElement,CategoryScale, LinearScale,Tooltip,Legend, ArcElement)
 
 const Dashboard=()=>{
     const[contacts,setContacts]=useState([]);
     const[chartType,setChartType]=useState('bar');
-    const[activityLog,setActivityLog]=useState([]);
+    const {activityLog}=useActivity();
     useEffect(()=>{
         if(auth.currentUser){
              fetchContacts();
@@ -66,11 +66,7 @@ const Dashboard=()=>{
         ]
     }
 
-    const logActivity=(message)=>{
-        const timestamp= new Date().toLocaleString();
-        setActivityLog(prev=>[{message,timestamp},...prev.slice(0,9)]);
-
-    };
+    
     return(
         <div className='container mt-4'>
             <h2>Dashboard</h2>
@@ -158,6 +154,12 @@ const Dashboard=()=>{
                 )}
             </tbody>
         </table>
+        <h4 className='mt-4'>Recent Activity</h4>
+        <ul className='list-group'>{activityLog.length ===0?(
+            <li className='list-group-item'>No Activity Feed</li>):(activityLog.map((log,index)=>(
+            <li key={index} className='list-group-item d-flex justify-content-between'><span>{log.message} </span><small className='text-muted'>{log.timestamp}</small>
+            </li>
+            )))}</ul>
         </div>
     )
 }

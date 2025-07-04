@@ -4,6 +4,7 @@ import {addContact,getUserContacts, updateContact,deleteContact} from '../servic
 import ContactForm from '../components/ContactForm';
 import {toast} from 'react-toastify';
 import handleExportToCSV from '../utils/exportContacts';
+import {useActivity} from '../contexts/ActivityContext';
 
 const Contacts=()=>{
     const{currentUser}=useAuth();
@@ -13,7 +14,9 @@ const Contacts=()=>{
         const[searchTerm,setSearchTerm]=useState('');
         const[activeTag,setActiveTag]=useState('');
 
-        const tagColors={
+        const {logActivity}= useActivity();
+
+                const tagColors={
             Lead:'primary',
             Client:'success',
             Supplier:'warning',
@@ -44,21 +47,22 @@ const Contacts=()=>{
             try{
             await addContact(newContact,currentUser.uid)
                 toast.success('contact added successfully!!')
-            loadContacts();   
+            loadContacts();  
+            logActivity(`Added Contact ${newContact.name}`) 
                 
             }catch(error){
                 if(error.code === 'permission-denied')
                 toast.error("you don't have permission to perform this action")
             }
-            // setContacts(updatedList);
+
         };
-        const handleDeleteContact=async(id)=>{
-            // const updatedList= contacts.filter(contact=>contact.id!==id);
-            // setContacts(updatedList);
+        const handleDeleteContact=async(id,contactName)=>{
+      
             try{
-                await deleteContact(id);
+                await deleteContact(id,contactName);
                 toast.success('contact deleted successfully');
             loadContacts();
+            logActivity(`Deleted Contact ${contactName}`)
             }catch(error){
                 if(error.code === 'permission-denied')
                 toast.error("you don't have permission to perform this action")
@@ -70,6 +74,7 @@ const Contacts=()=>{
                 await updateContact(id,updated);
                 toast.success('contact updated successfully!!s')
             loadContacts();
+            logActivity(`Updated Contact ${updated.name}`)
             }catch(error){
                 if(error.code === 'permission-denied')
                 toast.error("you don't have permission to perform this action")
@@ -157,7 +162,7 @@ const Contacts=()=>{
                             <p className='card-text'><strong>Phone: </strong>{contact.phone}</p>
                             <button className='btn btn-sm btn-outline-primary me-2' onClick={()=>handleEditContact(contact)}>Edit</button>
                             <button className='btn btn-sm btn-outline-danger'
-                            onClick={()=>handleDeleteContact(contact.id)}>Delete</button>
+                            onClick={()=>handleDeleteContact(contact.id,contact.name)}>Delete</button>
                         </div>
                     </div>
                 </div>
